@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Pakistan Student Hub</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f7f6;
+    color:#17201d;
+}
+
+header{
+    background:linear-gradient(135deg,#006a4e,#00966c);
+    color:white;
+    padding:28px 18px;
+    text-align:center;
+}
+
+header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+header p{
+    opacity:.9;
+}
+
+.container{
+    max-width:1050px;
+    margin:auto;
+    padding:18px;
+}
+
+.search{
+    width:100%;
+    padding:15px 18px;
+    border:1px solid #d5dfdc;
+    border-radius:15px;
+    font-size:16px;
+    outline:none;
+    margin-bottom:20px;
+}
+
+.section-title{
+    margin:22px 0 12px;
+    font-size:21px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.06);
+    cursor:pointer;
+    transition:.2s;
+    border:1px solid #e7eeeb;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+}
+
+.card .icon{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.card h3{
+    font-size:16px;
+    margin-bottom:5px;
+}
+
+.card p{
+    color:#68736f;
+    font-size:13px;
+}
+
+.hero{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.05);
+}
+
+.hero h2{
+    color:#006a4e;
+    margin-bottom:8px;
+}
+
+.info{
+    background:#e5f5ef;
+    border-left:5px solid #006a4e;
+    padding:16px;
+    border-radius:12px;
+    margin-top:20px;
+    line-height:1.6;
+}
+
+.book{
+    background:white;
+    border-radius:16px;
+    padding:18px;
+    border:1px solid #e4ebe8;
+    margin-bottom:10px;
+}
+
+.book h3{
+    margin-bottom:6px;
+}
+
+.book p{
+    color:#69736f;
+    margin-bottom:10px;
+}
+
+.button{
+    display:inline-block;
+    background:#006a4e;
+    color:white;
+    border:0;
+    padding:10px 15px;
+    border-radius:10px;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+.button.secondary{
+    background:#e7f3ef;
+    color:#006a4e;
+}
+
+footer{
+    text-align:center;
+    padding:30px 15px;
+    color:#6b7672;
+    font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🇵🇰 Pakistan Student Hub</h1>
+    <p>Learn • Practice • Grow</p>
+</header>
+
+<div class="container">
+
+    <input
+        id="search"
+        class="search"
+        type="search"
+        placeholder="Search board, class, subject or book..."
+        oninput="searchContent()"
+    >
+
+    <div class="hero">
+        <h2>📚 Your Study Library</h2>
+        <p>
+            Find your board, class, subject and verified textbook resources
+            in one place.
+        </p>
+
+        <div class="info">
+            <strong>Important:</strong><br>
+            Textbook information is organized around official
+            education-board/curriculum sources. Always check the
+            latest edition or academic year before studying.
+        </div>
+    </div>
+
+    <h2 class="section-title">🇵🇰 Select Board / Region</h2>
+
+    <div class="grid" id="boards"></div>
+
+    <h2 class="section-title">🎓 Classes</h2>
+
+    <div class="grid" id="classes"></div>
+
+    <h2 class="section-title">📖 Subjects</h2>
+
+    <div class="grid" id="subjects"></div>
+
+    <h2 class="section-title">📝 Study Tools</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <div class="icon">🧠</div>
+            <h3>MCQs</h3>
+            <p>Practice questions</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📝</div>
+            <h3>Notes</h3>
+            <p>Chapter-wise learning notes</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📊</div>
+            <h3>Progress</h3>
+            <p>Track your study progress</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">⭐</div>
+            <h3>Bookmarks</h3>
+            <p>Save important material</p>
+        </div>
+
+    </div>
+
+    <div id="results"></div>
+
+</div>
+
+<footer>
+    Pakistan Student Hub<br>
+    Educational resources • Verified sources • Student learning
+</footer>
+
+
+<script>
+
+/*
+    VERIFIED STRUCTURE
+
+    We intentionally do NOT invent textbook titles or chapters.
+
+    Official textbook links/data should be added here after
+    verification from the relevant board.
+*/
+
+const boards = [
+
+    {
+        name:"Punjab",
+        icon:"🟢",
+        description:"Punjab education resources",
+        source:"Official Punjab education/textbook source"
+    },
+
+    {
+        name:"Sindh",
+        icon:"🔵",
+        description:"Sindh education resources",
+        source:"Sindh Textbook Board"
+    },
+
+    {
+        name:"Khyber Pakhtunkhwa",
+        icon:"🟣",
+        description:"KPK education resources",
+        source:"Khyber Pakhtunkhwa Textbook Board"
+    },
+
+    {
+        name:"Balochistan",
+        icon:"🟠",
+        description:"Balochistan education resources",
+        source:"Official provincial education source"
+    },
+
+    {
+        name:"Federal / Islamabad",
+        icon:"🏛️",
+        description:"Federal / ICT resources",
+        source:"National Curriculum Council"
+    },
+
+    {
+        name:"Azad Jammu & Kashmir",
+        icon:"🌄",
+        description:"AJK education resources",
+        source:"Official AJK education source"
+    },
+
+    {
+        name:"Gilgit-Baltistan",
+        icon:"🏔️",
+        description:"GB education resources",
+        source:"Official GB education source"
+    }
+
+];
+
+const classes = [
+    "ECE / Katchi",
+    "Class 1",
+    "Class 2",
+    "Class 3",
+    "Class 4",
+    "Class 5",
+    "Class 6",
+    "Class 7",
+    "Class 8",
+    "Class 9",
+    "Class 10",
+    "Class 11",
+    "Class 12"
+];
+
+const subjects = [
+    "English",
+    "Urdu",
+    "Mathematics",
+    "General Science",
+    "Computer Science",
+    "Islamiat",
+    "Pakistan Studies",
+    "Social Studies",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Geography",
+    "History",
+    "Economics",
+    "Civics",
+    "Health & Physical Education"
+];
+
+function createCards(){
+
+    const boardBox = document.getElementById("boards");
+
+    boards.forEach(board => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="icon">${board.icon}</div>
+            <h3>${board.name}</h3>
+            <p>${board.description}</p>
+        `;
+
+        card.onclick = () => {
+            showBoard(board);
+        };
+
+        boardBox.appendChild(card);
+
+    });
+
+
+    const classBox = document.getElementById("classes");
+
+    classes.forEach(item => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="icon">🎓</div>
+            <h3>${item}</h3>
+            <p>Open class resources</p>
+        `;
+
+        card.onclick = () => {
+            showMessage(
+                item,
+                "Select your board first so the app can show the correct textbook resources."
+            );
+        };
+
+        classBox.appendChild(card);
+
+    });
+
+
+    const subjectBox = document.getElementById("subjects");
+
+    subjects.forEach(subject => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="icon">📖</div>
+            <h3>${subject}</h3>
+            <p>Study resources</p>
+        `;
+
+        card.onclick = () => {
+            showMessage(
+                subject,
+                "Verified textbook and chapter material will appear here after the relevant board and edition are selected."
+            );
+        };
+
+        subjectBox.appendChild(card);
+
+    });
+
+}
+
+
+function showBoard(board){
+
+    const results = document.getElementById("results");
+
+    results.innerHTML = `
+        <div class="hero" style="margin-top:25px">
+
+            <h2>${board.icon} ${board.name}</h2>
+
+            <p>
+                ${board.description}
+            </p>
+
+            <div class="info">
+
+                <strong>Source status</strong><br>
+
+                ${board.source}
+
+                <br><br>
+
+                Choose your class and medium to continue.
+
+            </div>
+
+            <br>
+
+            <button class="button" onclick="window.scrollTo({
+                top:document.body.scrollHeight,
+                behavior:'smooth'
+            })">
+                Continue
+            </button>
+
+        </div>
+    `;
+
+    results.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function showMessage(title,message){
+
+    const results = document.getElementById("results");
+
+    results.innerHTML = `
+        <div class="hero" style="margin-top:25px">
+
+            <h2>${title}</h2>
+
+            <p>${message}</p>
+
+            <div class="info">
+                Content will only be published after verification
+                against the appropriate official curriculum/textbook
+                source.
+            </div>
+
+        </div>
+    `;
+
+    results.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+function searchContent(){
+
+    const query =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const results =
+        document.getElementById("results");
+
+    if(!query){
+
+        results.innerHTML = "";
+
+        return;
+    }
+
+    const boardMatches =
+        boards.filter(item =>
+            item.name.toLowerCase().includes(query)
+        );
+
+    const classMatches =
+        classes.filter(item =>
+            item.toLowerCase().includes(query)
+        );
+
+    const subjectMatches =
+        subjects.filter(item =>
+            item.toLowerCase().includes(query)
+        );
+
+    let html = `
+        <div class="hero" style="margin-top:20px">
+            <h2>🔎 Search Results</h2>
+    `;
+
+    if(boardMatches.length){
+
+        html += `<h3 style="margin-top:15px">Boards</h3>`;
+
+        boardMatches.forEach(item => {
+
+            html += `
+                <div class="book">
+                    <h3>${item.icon} ${item.name}</h3>
+                    <p>${item.description}</p>
+                </div>
+            `;
+
+        });
+
+    }
+
+
+    if(classMatches.length){
+
+        html += `<h3 style="margin-top:15px">Classes</h3>`;
+
+        classMatches.forEach(item => {
+
+            html += `
+                <div class="book">
+                    <h3>🎓 ${item}</h3>
+                    <p>Class resources</p>
+                </div>
+            `;
+
+        });
+
+    }
+
+
+    if(subjectMatches.length){
+
+        html += `<h3 style="margin-top:15px">Subjects</h3>`;
+
+        subjectMatches.forEach(item => {
+
+            html += `
+                <div class="book">
+                    <h3>📖 ${item}</h3>
+                    <p>Subject resources</p>
+                </div>
+            `;
+
+        });
+
+    }
+
+
+    if(
+        !boardMatches.length &&
+        !classMatches.length &&
+        !subjectMatches.length
+    ){
+
+        html += `
+            <div class="info">
+                No verified result found.
+                Try another board, class or subject.
+            </div>
+        `;
+
+    }
+
+    html += `</div>`;
+
+    results.innerHTML = html;
+
+}
+
+
+createCards();
+
+</script>
+
+</body>
+</html>
