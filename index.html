@@ -11,10 +11,10 @@
     box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
+    font-family:Arial,sans-serif;
     background:#f4f7f6;
     color:#17201d;
 }
@@ -31,29 +31,32 @@ header h1{
     margin-bottom:7px;
 }
 
-header p{
-    opacity:.9;
-}
-
 .container{
-    max-width:1050px;
+    max-width:1100px;
     margin:auto;
     padding:18px;
 }
 
 .search{
     width:100%;
-    padding:15px 18px;
-    border:1px solid #d5dfdc;
+    padding:15px;
+    border:1px solid #d8e1de;
     border-radius:15px;
     font-size:16px;
-    outline:none;
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
-.section-title{
-    margin:22px 0 12px;
-    font-size:21px;
+.section{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.05);
+}
+
+.section h2{
+    color:#006a4e;
+    margin-bottom:15px;
 }
 
 .grid{
@@ -63,22 +66,27 @@ header p{
 }
 
 .card{
-    background:white;
-    border-radius:18px;
-    padding:20px;
-    box-shadow:0 5px 18px rgba(0,0,0,.06);
+    background:#fff;
+    border:1px solid #e1e9e6;
+    border-radius:16px;
+    padding:18px;
     cursor:pointer;
     transition:.2s;
-    border:1px solid #e7eeeb;
 }
 
 .card:hover{
     transform:translateY(-3px);
+    border-color:#00966c;
 }
 
-.card .icon{
-    font-size:28px;
-    margin-bottom:10px;
+.card.active{
+    background:#e5f5ef;
+    border-color:#006a4e;
+}
+
+.icon{
+    font-size:27px;
+    margin-bottom:9px;
 }
 
 .card h3{
@@ -87,38 +95,23 @@ header p{
 }
 
 .card p{
-    color:#68736f;
+    color:#6b7672;
     font-size:13px;
 }
 
-.hero{
-    background:white;
-    border-radius:20px;
-    padding:22px;
-    margin-bottom:20px;
-    box-shadow:0 5px 18px rgba(0,0,0,.05);
+.hidden{
+    display:none;
 }
 
-.hero h2{
-    color:#006a4e;
-    margin-bottom:8px;
-}
-
-.info{
-    background:#e5f5ef;
-    border-left:5px solid #006a4e;
-    padding:16px;
-    border-radius:12px;
-    margin-top:20px;
-    line-height:1.6;
+.books{
+    display:grid;
+    gap:12px;
 }
 
 .book{
-    background:white;
-    border-radius:16px;
-    padding:18px;
-    border:1px solid #e4ebe8;
-    margin-bottom:10px;
+    border:1px solid #e1e9e6;
+    border-radius:15px;
+    padding:17px;
 }
 
 .book h3{
@@ -126,30 +119,38 @@ header p{
 }
 
 .book p{
-    color:#69736f;
-    margin-bottom:10px;
+    color:#68736f;
+    margin-bottom:12px;
 }
 
 .button{
     display:inline-block;
+    border:0;
+    border-radius:10px;
+    padding:11px 16px;
     background:#006a4e;
     color:white;
-    border:0;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
     text-decoration:none;
+    cursor:pointer;
 }
 
 .button.secondary{
-    background:#e7f3ef;
+    background:#e8f3ef;
     color:#006a4e;
+}
+
+.message{
+    padding:15px;
+    border-radius:12px;
+    background:#fff4d6;
+    margin-top:12px;
+    line-height:1.5;
 }
 
 footer{
     text-align:center;
-    padding:30px 15px;
-    color:#6b7672;
+    padding:30px;
+    color:#68736f;
     font-size:13px;
 }
 </style>
@@ -159,152 +160,118 @@ footer{
 
 <header>
     <h1>🇵🇰 Pakistan Student Hub</h1>
-    <p>Learn • Practice • Grow</p>
+    <p>Books • Subjects • Notes • Practice</p>
 </header>
 
 <div class="container">
 
-    <input
-        id="search"
-        class="search"
-        type="search"
-        placeholder="Search board, class, subject or book..."
-        oninput="searchContent()"
-    >
+<input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="🔎 Search class, subject or book..."
+    oninput="searchEverything()"
+>
 
-    <div class="hero">
-        <h2>📚 Your Study Library</h2>
-        <p>
-            Find your board, class, subject and verified textbook resources
-            in one place.
-        </p>
+<div class="section">
+    <h2>1️⃣ Select Board</h2>
+    <div id="boards" class="grid"></div>
+</div>
 
-        <div class="info">
-            <strong>Important:</strong><br>
-            Textbook information is organized around official
-            education-board/curriculum sources. Always check the
-            latest edition or academic year before studying.
-        </div>
-    </div>
+<div id="classSection" class="section hidden">
+    <h2>2️⃣ Select Class</h2>
+    <div id="classes" class="grid"></div>
+</div>
 
-    <h2 class="section-title">🇵🇰 Select Board / Region</h2>
+<div id="mediumSection" class="section hidden">
+    <h2>3️⃣ Select Medium</h2>
+    <div id="mediums" class="grid"></div>
+</div>
 
-    <div class="grid" id="boards"></div>
+<div id="subjectSection" class="section hidden">
+    <h2>4️⃣ Select Subject</h2>
+    <div id="subjects" class="grid"></div>
+</div>
 
-    <h2 class="section-title">🎓 Classes</h2>
+<div id="bookSection" class="section hidden">
+    <h2>5️⃣ Books</h2>
+    <div id="books" class="books"></div>
+</div>
 
-    <div class="grid" id="classes"></div>
-
-    <h2 class="section-title">📖 Subjects</h2>
-
-    <div class="grid" id="subjects"></div>
-
-    <h2 class="section-title">📝 Study Tools</h2>
-
-    <div class="grid">
-
-        <div class="card">
-            <div class="icon">🧠</div>
-            <h3>MCQs</h3>
-            <p>Practice questions</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">📝</div>
-            <h3>Notes</h3>
-            <p>Chapter-wise learning notes</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">📊</div>
-            <h3>Progress</h3>
-            <p>Track your study progress</p>
-        </div>
-
-        <div class="card">
-            <div class="icon">⭐</div>
-            <h3>Bookmarks</h3>
-            <p>Save important material</p>
-        </div>
-
-    </div>
-
-    <div id="results"></div>
+<div id="searchResults" class="section hidden"></div>
 
 </div>
 
 <footer>
-    Pakistan Student Hub<br>
-    Educational resources • Verified sources • Student learning
+Pakistan Student Hub<br>
+Educational resources organized for students
 </footer>
-
 
 <script>
 
-/*
-    VERIFIED STRUCTURE
-
-    We intentionally do NOT invent textbook titles or chapters.
-
-    Official textbook links/data should be added here after
-    verification from the relevant board.
-*/
+/* =========================
+   BOARDS
+========================= */
 
 const boards = [
-
     {
+        id:"sindh",
+        name:"Sindh",
+        icon:"🔵",
+        description:"Sindh Textbook Board",
+        official:"https://ebooks.stbb.edu.pk/"
+    },
+    {
+        id:"punjab",
         name:"Punjab",
         icon:"🟢",
         description:"Punjab education resources",
-        source:"Official Punjab education/textbook source"
+        official:""
     },
-
     {
-        name:"Sindh",
-        icon:"🔵",
-        description:"Sindh education resources",
-        source:"Sindh Textbook Board"
-    },
-
-    {
+        id:"kpk",
         name:"Khyber Pakhtunkhwa",
         icon:"🟣",
         description:"KPK education resources",
-        source:"Khyber Pakhtunkhwa Textbook Board"
+        official:""
     },
-
     {
+        id:"balochistan",
         name:"Balochistan",
         icon:"🟠",
         description:"Balochistan education resources",
-        source:"Official provincial education source"
+        official:""
     },
-
     {
+        id:"federal",
         name:"Federal / Islamabad",
         icon:"🏛️",
-        description:"Federal / ICT resources",
-        source:"National Curriculum Council"
+        description:"Federal education resources",
+        official:""
     },
-
     {
-        name:"Azad Jammu & Kashmir",
-        icon:"🌄",
-        description:"AJK education resources",
-        source:"Official AJK education source"
+        id:"ajk",
+        name:"AJK",
+        icon:"🏔️",
+        description:"Azad Jammu & Kashmir",
+        official:""
     },
-
     {
+        id:"gb",
         name:"Gilgit-Baltistan",
         icon:"🏔️",
-        description:"GB education resources",
-        source:"Official GB education source"
+        description:"Gilgit-Baltistan education",
+        official:""
     }
-
 ];
 
+
+/* =========================
+   CLASSES
+========================= */
+
 const classes = [
-    "ECE / Katchi",
+    "ECCE / Katchi",
     "Class 1",
     "Class 2",
     "Class 3",
@@ -319,11 +286,27 @@ const classes = [
     "Class 12"
 ];
 
+
+/* =========================
+   MEDIUMS
+========================= */
+
+const mediums = [
+    "English",
+    "Urdu",
+    "Sindhi"
+];
+
+
+/* =========================
+   GENERAL SUBJECTS
+========================= */
+
 const subjects = [
     "English",
     "Urdu",
     "Mathematics",
-    "General Science",
+    "Science",
     "Computer Science",
     "Islamiat",
     "Pakistan Studies",
@@ -334,13 +317,164 @@ const subjects = [
     "Geography",
     "History",
     "Economics",
-    "Civics",
-    "Health & Physical Education"
+    "Civics"
 ];
 
-function createCards(){
 
-    const boardBox = document.getElementById("boards");
+/*
+=========================================
+ VERIFIED BOOK DATA
+
+ Only books with a verified official URL
+ should be placed here.
+
+ The Sindh examples below use the official
+ Sindh Textbook Board eBooks portal.
+=========================================
+*/
+
+const books = [
+
+    {
+        board:"sindh",
+        className:"Class 1",
+        medium:"English",
+        subject:"English",
+        title:"English Book I",
+        year:"2026",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=1&medium=English"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 1",
+        medium:"English",
+        subject:"Mathematics",
+        title:"English Math I",
+        year:"2026",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=1&medium=English"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 1",
+        medium:"Urdu",
+        subject:"Mathematics",
+        title:"Urdu Riazi I",
+        year:"2026",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=1&medium=Urdu"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 1",
+        medium:"Urdu",
+        subject:"Urdu",
+        title:"Urdu Reader I",
+        year:"2022-23",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=1&medium=Urdu"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 9",
+        medium:"Sindhi",
+        subject:"Biology",
+        title:"Biology IX",
+        year:"2020-21",
+        url:"https://ebooks.stbb.edu.pk/sindhi/class-ix"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 9",
+        medium:"Sindhi",
+        subject:"Computer Science",
+        title:"Computer Science IX",
+        year:"2020-21",
+        url:"https://ebooks.stbb.edu.pk/sindhi/class-ix"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 9",
+        medium:"Sindhi",
+        subject:"Chemistry",
+        title:"Chemistry IX",
+        year:"2022-23",
+        url:"https://ebooks.stbb.edu.pk/sindhi/class-ix"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 10",
+        medium:"English",
+        subject:"Biology",
+        title:"English Biology X",
+        year:"2021-22",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=11&medium=English"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 10",
+        medium:"English",
+        subject:"Chemistry",
+        title:"English Chemistry X",
+        year:"2022-23",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=11&medium=English"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 10",
+        medium:"English",
+        subject:"Computer Science",
+        title:"English Computer Science X",
+        year:"2025-26",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=11&medium=English"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 10",
+        medium:"English",
+        subject:"Mathematics",
+        title:"English Math X",
+        year:"2024-25",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=11&medium=English"
+    },
+
+    {
+        board:"sindh",
+        className:"Class 10",
+        medium:"English",
+        subject:"Physics",
+        title:"English Physics X",
+        year:"2026",
+        url:"https://portal.stbb.edu.pk/ebooks/class.php?id=11&medium=English"
+    }
+
+];
+
+
+/* =========================
+   APP STATE
+========================= */
+
+let selectedBoard = "";
+let selectedClass = "";
+let selectedMedium = "";
+let selectedSubject = "";
+
+
+/* =========================
+   CREATE BOARDS
+========================= */
+
+function createBoards(){
+
+    const box = document.getElementById("boards");
 
     boards.forEach(board => {
 
@@ -354,16 +488,54 @@ function createCards(){
             <p>${board.description}</p>
         `;
 
-        card.onclick = () => {
-            showBoard(board);
-        };
+        card.onclick = () => selectBoard(board);
 
-        boardBox.appendChild(card);
-
+        box.appendChild(card);
     });
+}
 
 
-    const classBox = document.getElementById("classes");
+/* =========================
+   SELECT BOARD
+========================= */
+
+function selectBoard(board){
+
+    selectedBoard = board.id;
+    selectedClass = "";
+    selectedMedium = "";
+    selectedSubject = "";
+
+    document.getElementById("classSection")
+        .classList.remove("hidden");
+
+    document.getElementById("mediumSection")
+        .classList.add("hidden");
+
+    document.getElementById("subjectSection")
+        .classList.add("hidden");
+
+    document.getElementById("bookSection")
+        .classList.add("hidden");
+
+    createClasses();
+
+    window.scrollTo({
+        top:document.getElementById("classSection").offsetTop - 10,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================
+   CREATE CLASSES
+========================= */
+
+function createClasses(){
+
+    const box = document.getElementById("classes");
+
+    box.innerHTML = "";
 
     classes.forEach(item => {
 
@@ -374,22 +546,98 @@ function createCards(){
         card.innerHTML = `
             <div class="icon">🎓</div>
             <h3>${item}</h3>
-            <p>Open class resources</p>
+            <p>Open class</p>
         `;
 
-        card.onclick = () => {
-            showMessage(
-                item,
-                "Select your board first so the app can show the correct textbook resources."
-            );
-        };
+        card.onclick = () => selectClass(item);
 
-        classBox.appendChild(card);
-
+        box.appendChild(card);
     });
+}
 
 
-    const subjectBox = document.getElementById("subjects");
+/* =========================
+   SELECT CLASS
+========================= */
+
+function selectClass(className){
+
+    selectedClass = className;
+
+    document.getElementById("mediumSection")
+        .classList.remove("hidden");
+
+    createMediums();
+
+    window.scrollTo({
+        top:document.getElementById("mediumSection").offsetTop - 10,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================
+   CREATE MEDIUMS
+========================= */
+
+function createMediums(){
+
+    const box = document.getElementById("mediums");
+
+    box.innerHTML = "";
+
+    mediums.forEach(medium => {
+
+        const card = document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="icon">
+                ${medium === "English" ? "🔵" :
+                  medium === "Urdu" ? "🟢" : "🟡"}
+            </div>
+
+            <h3>${medium}</h3>
+            <p>Choose medium</p>
+        `;
+
+        card.onclick = () => selectMedium(medium);
+
+        box.appendChild(card);
+    });
+}
+
+
+/* =========================
+   SELECT MEDIUM
+========================= */
+
+function selectMedium(medium){
+
+    selectedMedium = medium;
+
+    document.getElementById("subjectSection")
+        .classList.remove("hidden");
+
+    createSubjects();
+
+    window.scrollTo({
+        top:document.getElementById("subjectSection").offsetTop - 10,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================
+   CREATE SUBJECTS
+========================= */
+
+function createSubjects(){
+
+    const box = document.getElementById("subjects");
+
+    box.innerHTML = "";
 
     subjects.forEach(subject => {
 
@@ -400,210 +648,212 @@ function createCards(){
         card.innerHTML = `
             <div class="icon">📖</div>
             <h3>${subject}</h3>
-            <p>Study resources</p>
+            <p>Open subject</p>
         `;
 
-        card.onclick = () => {
-            showMessage(
-                subject,
-                "Verified textbook and chapter material will appear here after the relevant board and edition are selected."
-            );
-        };
+        card.onclick = () => selectSubject(subject);
 
-        subjectBox.appendChild(card);
-
+        box.appendChild(card);
     });
-
 }
 
 
-function showBoard(board){
+/* =========================
+   SELECT SUBJECT
+========================= */
 
-    const results = document.getElementById("results");
+function selectSubject(subject){
 
-    results.innerHTML = `
-        <div class="hero" style="margin-top:25px">
+    selectedSubject = subject;
 
-            <h2>${board.icon} ${board.name}</h2>
+    showBooks();
+}
 
-            <p>
-                ${board.description}
-            </p>
 
-            <div class="info">
+/* =========================
+   SHOW BOOKS
+========================= */
 
-                <strong>Source status</strong><br>
+function showBooks(){
 
-                ${board.source}
+    const section =
+        document.getElementById("bookSection");
+
+    const box =
+        document.getElementById("books");
+
+    section.classList.remove("hidden");
+
+    box.innerHTML = "";
+
+    const matchingBooks = books.filter(book =>
+        book.board === selectedBoard &&
+        book.className === selectedClass &&
+        book.medium === selectedMedium &&
+        book.subject === selectedSubject
+    );
+
+
+    if(matchingBooks.length === 0){
+
+        box.innerHTML = `
+            <div class="message">
+
+                📚 <strong>Book not added yet</strong><br><br>
+
+                We do not have a verified book link for:
 
                 <br><br>
 
-                Choose your class and medium to continue.
+                <strong>
+                ${selectedBoard}
+                →
+                ${selectedClass}
+                →
+                ${selectedMedium}
+                →
+                ${selectedSubject}
+                </strong>
+
+                <br><br>
+
+                We are not showing made-up content.
+                The book will be added when its official
+                source is verified.
 
             </div>
+        `;
 
-            <br>
+    }else{
 
-            <button class="button" onclick="window.scrollTo({
-                top:document.body.scrollHeight,
-                behavior:'smooth'
-            })">
-                Continue
-            </button>
+        matchingBooks.forEach(book => {
 
-        </div>
-    `;
+            const div = document.createElement("div");
 
-    results.scrollIntoView({
+            div.className = "book";
+
+            div.innerHTML = `
+                <h3>📘 ${book.title}</h3>
+
+                <p>
+                    ${book.className}
+                    • ${book.medium}
+                    • Edition: ${book.year}
+                </p>
+
+                <a
+                    class="button"
+                    href="${book.url}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    📖 Open Official Book
+                </a>
+            `;
+
+            box.appendChild(div);
+
+        });
+
+    }
+
+
+    section.scrollIntoView({
         behavior:"smooth"
     });
-
 }
 
 
-function showMessage(title,message){
+/* =========================
+   SEARCH
+========================= */
 
-    const results = document.getElementById("results");
-
-    results.innerHTML = `
-        <div class="hero" style="margin-top:25px">
-
-            <h2>${title}</h2>
-
-            <p>${message}</p>
-
-            <div class="info">
-                Content will only be published after verification
-                against the appropriate official curriculum/textbook
-                source.
-            </div>
-
-        </div>
-    `;
-
-    results.scrollIntoView({
-        behavior:"smooth"
-    });
-
-}
-
-
-function searchContent(){
+function searchEverything(){
 
     const query =
-        document
-        .getElementById("search")
+        document.getElementById("search")
         .value
         .toLowerCase()
         .trim();
 
     const results =
-        document.getElementById("results");
+        document.getElementById("searchResults");
 
     if(!query){
 
-        results.innerHTML = "";
+        results.classList.add("hidden");
 
         return;
     }
 
-    const boardMatches =
-        boards.filter(item =>
-            item.name.toLowerCase().includes(query)
-        );
-
-    const classMatches =
-        classes.filter(item =>
-            item.toLowerCase().includes(query)
-        );
-
-    const subjectMatches =
-        subjects.filter(item =>
-            item.toLowerCase().includes(query)
-        );
-
-    let html = `
-        <div class="hero" style="margin-top:20px">
-            <h2>🔎 Search Results</h2>
-    `;
-
-    if(boardMatches.length){
-
-        html += `<h3 style="margin-top:15px">Boards</h3>`;
-
-        boardMatches.forEach(item => {
-
-            html += `
-                <div class="book">
-                    <h3>${item.icon} ${item.name}</h3>
-                    <p>${item.description}</p>
-                </div>
-            `;
-
-        });
-
-    }
+    const foundBooks = books.filter(book =>
+        book.title.toLowerCase().includes(query) ||
+        book.subject.toLowerCase().includes(query) ||
+        book.className.toLowerCase().includes(query) ||
+        book.medium.toLowerCase().includes(query) ||
+        book.board.toLowerCase().includes(query)
+    );
 
 
-    if(classMatches.length){
+    results.classList.remove("hidden");
 
-        html += `<h3 style="margin-top:15px">Classes</h3>`;
+    if(foundBooks.length === 0){
 
-        classMatches.forEach(item => {
+        results.innerHTML = `
+            <h2>🔎 Search</h2>
 
-            html += `
-                <div class="book">
-                    <h3>🎓 ${item}</h3>
-                    <p>Class resources</p>
-                </div>
-            `;
-
-        });
-
-    }
-
-
-    if(subjectMatches.length){
-
-        html += `<h3 style="margin-top:15px">Subjects</h3>`;
-
-        subjectMatches.forEach(item => {
-
-            html += `
-                <div class="book">
-                    <h3>📖 ${item}</h3>
-                    <p>Subject resources</p>
-                </div>
-            `;
-
-        });
-
-    }
-
-
-    if(
-        !boardMatches.length &&
-        !classMatches.length &&
-        !subjectMatches.length
-    ){
-
-        html += `
-            <div class="info">
-                No verified result found.
-                Try another board, class or subject.
+            <div class="message">
+                No verified book found for
+                <strong>${query}</strong>.
+                Try searching another class,
+                subject or book name.
             </div>
         `;
 
+        return;
     }
 
-    html += `</div>`;
+
+    let html = `<h2>🔎 Search Results</h2>`;
+
+    foundBooks.forEach(book => {
+
+        html += `
+            <div class="book">
+
+                <h3>📘 ${book.title}</h3>
+
+                <p>
+                    ${book.board}
+                    • ${book.className}
+                    • ${book.medium}
+                    • ${book.subject}
+                    • ${book.year}
+                </p>
+
+                <a
+                    class="button"
+                    href="${book.url}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    📖 Open Official Book
+                </a>
+
+            </div>
+        `;
+
+    });
 
     results.innerHTML = html;
-
 }
 
 
-createCards();
+/* =========================
+   START APP
+========================= */
+
+createBoards();
 
 </script>
 
